@@ -7,7 +7,8 @@
     = csrf_meta_tags
     = csp_meta_tag
   %body
-    %ul
-      %li= link_to "Home", welcome_index_path
-      %li= link_to "About", welcome_about_path
-    = yield
+    %div.container
+      %ul.nav.nav-tabs
+        %li= link_to "Home", welcome_index_path
+        %li= link_to "About", welcome_about_path
+      = yield
