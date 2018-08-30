@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title Stuffit
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = csrf_meta_tags
+    = csp_meta_tag
+  %body
+    %ul
+      %li= link_to "Home", welcome_index_path
+      %li= link_to "About", welcome_about_path
+    = yield
