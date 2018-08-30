@@ -15,7 +15,7 @@ RSpec.describe WelcomeController, type: :request do
     end  
   end
   
-    describe 'get about' do
+  describe 'get about' do
     it 'returns the page with a 200 status' do
       get '/welcome/about'
       expect(response.status).to eq 200
@@ -27,7 +27,7 @@ RSpec.describe WelcomeController, type: :request do
     end  
   end
   
-    describe 'get contact' do
+  describe 'get contact' do
     it 'returns the page with a 200 status' do
       get '/welcome/contact'
       expect(response.status).to eq 200
@@ -39,6 +39,17 @@ RSpec.describe WelcomeController, type: :request do
     end  
   end
   
+  describe 'get faq' do
+    it 'returns the page with a 200 status' do
+      get '/welcome/faq'
+      expect(response.status).to eq 200
+    end
+    
+    it 'renders the about template' do
+      get '/welcome/faq'
+      expect(response).to render_template("faq")
+    end  
+  end
   
   
 end
