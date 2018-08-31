@@ -7,6 +7,7 @@ ruby '2.4.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'bootstrap-sass'
+gem 'font-awesome-sass', '~> 5.3.1'
 gem 'capybara'
 gem 'haml'
 gem 'pg'
