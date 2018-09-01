@@ -3,14 +3,23 @@ require 'rails_helper'
 RSpec.describe PostsController, type: :request do
 
   describe "GET #index" do
+    
+    let(:my_post) { Post.create!(title: 'title', body: 'body') }
+
     it "returns http success" do
       get '/posts'
       expect(response.status).to eq 200
     end
     
-    it "returns posts" do
+     it "renders the index template" do
       get '/posts'
-    end  
+      expect(response).to render_template(:index)
+    end
+    
+    it "assigns [my_post] to @posts" do
+       get '/posts'
+       expect(assigns(:posts)).to eq([my_post])
+     end
   end
   # describe "GET #show" do
   #   it "returns http success" do
