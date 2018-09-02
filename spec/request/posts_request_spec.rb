@@ -18,12 +18,20 @@ RSpec.describe PostsController, type: :request do
     end
   end
   
-  # describe "GET #show" do
-  #   it "returns http success" do
-  #     get :show
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
+  describe "GET show" do
+    
+    let(:my_post) { Post.create!(title: 'title', body: 'body') }
+    
+    it "returns http success" do
+      get '/posts', params: { id: my_post.id }
+      expect(response.status).to eq 200
+    end
+     
+    it "renders the #show view" do
+      get "/posts", params: { id: my_post.id }
+      expect(response).to render_template(:show)
+    end
+  end
 
   describe "GET new" do
     it "returns http success" do
