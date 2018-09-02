@@ -11,4 +11,9 @@
       %ul.nav.nav-tabs
         %li= link_to "Home", root_path
         %li= link_to "About", about_path
-      = yield
+        
+    - flash.each do |type, msg|
+      %div{:class => "alert alert-#{type == :notice ? "success" : type}", "data-dismiss" => "alert"}
+        %button.close &times;
+        = msg if msg.is_a?(String)
+    = yield
