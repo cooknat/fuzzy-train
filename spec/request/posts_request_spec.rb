@@ -23,12 +23,12 @@ RSpec.describe PostsController, type: :request do
     let(:my_post) { Post.create!(title: 'title', body: 'body') }
     
     it "returns http success" do
-      get '/posts', params: { id: my_post.id }
+      get '/posts/', params: { id: my_post.id }
       expect(response.status).to eq 200
     end
      
     it "renders the #show view" do
-      get "/posts", params: { id: my_post.id }
+      get "/posts/#{my_post.id}"
       expect(response).to render_template(:show)
     end
   end
@@ -56,11 +56,27 @@ RSpec.describe PostsController, type: :request do
     end
   end
 
-  # describe "GET #edit" do
-  #   it "returns http success" do
-  #     get :edit
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
+ describe "GET edit" do
+   let(:my_post) { Post.create!(title: 'title', body: 'body') }
+     it "returns http success" do
+       get "/posts/#{my_post.id}/edit"
+       expect(response.status).to eq 200
+     end
+ 
+     it "renders the #edit view" do
+       get "/posts/#{my_post.id}/edit"
+       expect(response).to render_template(:edit)
+     end
+ 
+     it "assigns post to be updated to @post" do
+       get "/posts/#{my_post.id}/edit"
+ 
+       post_instance = my_post
+ 
+       expect(post_instance.id).to eq my_post.id
+       expect(post_instance.title).to eq my_post.title
+       expect(post_instance.body).to eq my_post.body
+     end
+   end
 
 end
