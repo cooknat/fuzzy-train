@@ -2,11 +2,10 @@ require 'rails_helper'
 require 'random_data'
 
 RSpec.describe PostsController, type: :request do
+  
+  let(:my_post) { Post.create!(title: 'title', body: 'body') }
 
   describe "GET #index" do
-    
-    let(:my_post) { Post.create!(title: 'title', body: 'body') }
-
     it "returns http success" do
       get '/posts'
       expect(response.status).to eq 200
@@ -19,9 +18,6 @@ RSpec.describe PostsController, type: :request do
   end
   
   describe "GET show" do
-    
-    let(:my_post) { Post.create!(title: 'title', body: 'body') }
-    
     it "returns http success" do
       get '/posts/', params: { id: my_post.id }
       expect(response.status).to eq 200
@@ -56,31 +52,29 @@ RSpec.describe PostsController, type: :request do
     end
   end
 
- describe "GET edit" do
-   let(:my_post) { Post.create!(title: 'title', body: 'body') }
-     it "returns http success" do
-       get "/posts/#{my_post.id}/edit"
-       expect(response.status).to eq 200
-     end
+  describe "GET edit" do
+    it "returns http success" do
+      get "/posts/#{my_post.id}/edit"
+      expect(response.status).to eq 200
+    end
  
-     it "renders the #edit view" do
-       get "/posts/#{my_post.id}/edit"
-       expect(response).to render_template(:edit)
-     end
+    it "renders the #edit view" do
+      get "/posts/#{my_post.id}/edit"
+      expect(response).to render_template(:edit)
+    end
  
-     it "assigns post to be updated to @post" do
-       get "/posts/#{my_post.id}/edit"
+    it "assigns post to be updated to @post" do
+      get "/posts/#{my_post.id}/edit"
  
-       post_instance = my_post
+      post_instance = my_post
  
-       expect(post_instance.id).to eq my_post.id
-       expect(post_instance.title).to eq my_post.title
-       expect(post_instance.body).to eq my_post.body
-     end
-   end
+      expect(post_instance.id).to eq my_post.id
+      expect(post_instance.title).to eq my_post.title
+      expect(post_instance.body).to eq my_post.body
+    end
+  end
    
   describe "PUT update" do
-    let(:my_post) { Post.create!(title: 'title', body: 'body') }
     it "updates post with expected attributes" do
       new_title = RandomData.random_sentence
       new_body = RandomData.random_paragraph
@@ -101,5 +95,18 @@ RSpec.describe PostsController, type: :request do
        expect(response).to redirect_to my_post
      end
    end
-
+   
+  describe "DELETE destroy" do
+    it "deletes the post" do
+      delete "/posts/#{my_post.id}"
+      
+      count = Post.where({id: my_post.id}).size
+      expect(count).to eq 0
+    end
+ 
+    it "redirects to posts index" do
+      delete "/posts/#{my_post.id}"
+      expect(response).to redirect_to posts_path
+    end
+  end
 end
