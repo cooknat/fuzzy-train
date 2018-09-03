@@ -1,6 +1,8 @@
-%h1
-  = @post.title
-%p
-  = @post.body
-  
+%h1= @post.title
+%div.row
+  %div.col-md-8
+    %p= @post.body
+  %div.col-md-4
+    = link_to "Edit", edit_post_path(@post), class: 'btn btn-success'
  
+
