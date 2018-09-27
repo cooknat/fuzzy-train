@@ -1,0 +1,14 @@
+%h1
+  Topics
+%div.row
+  %div.col-md-8
+    - @topics.each do |topic|
+      %div.media
+        %div.media-body
+          %h4.media-heading
+            = link_to topic.name, topic  
+            %small
+              = topic.description
+    = link_to "New Topic", new_topic_path, class: 'btn btn-success'          
+
+
