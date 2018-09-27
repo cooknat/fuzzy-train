@@ -16,4 +16,16 @@ RSpec.describe TopicsController, type: :request do
       expect(response).to render_template(:index)
     end
   end
+
+  describe "GET show" do
+    it "returns http success" do
+      get '/topics/', params: { id: topic.id }
+      expect(response.status).to eq 200
+    end
+     
+    it "renders the #show view" do
+      get "/topics/#{topic.id}"
+      expect(response).to render_template(:show)
+    end
+  end
 end
