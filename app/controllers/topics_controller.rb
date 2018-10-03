@@ -7,4 +7,8 @@ class TopicsController < ApplicationController
 		@topic = Topic.find(params[:id])
 	end
 
+	def new
+		@topic = Topic.new
+	end
+
 end

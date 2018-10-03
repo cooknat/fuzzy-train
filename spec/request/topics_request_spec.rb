@@ -28,4 +28,16 @@ RSpec.describe TopicsController, type: :request do
       expect(response).to render_template(:show)
     end
   end
+
+  describe "GET new" do
+    it "returns http success" do
+      get '/topics/new'
+      expect(response).to have_http_status(:success)
+     end
+ 
+    it "renders the #new view" do
+      get '/topics/new'
+      expect(response).to render_template :new
+     end
+  end
 end
