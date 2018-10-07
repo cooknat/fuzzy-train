@@ -1,2 +1,15 @@
 %h1
   Edit Topic
+%div.col-md-8
+  = form_for @topic do |f| 
+    %div.form-group
+      = f.label :name
+      = f.text_field :name, class: 'form-control', placeholder: "Enter topic name"
+    %div.form-group    
+      = f.label :description 
+      = f.text_area :description, rows: 8, class: 'form-control', placeholder: "Enter topic description"
+    %div.form-group
+      = f.label :public, class: 'checkbox' do
+        = f.check_box :public 
+        Public topic
+    = f.submit 'Save', class: 'btn btn-success'  

@@ -73,4 +73,40 @@ RSpec.describe TopicsController, type: :request do
      #   expect(topic_instance.description).to eq my_topic.description
      # end
    end
+
+  describe "PUT update" do
+    it "updates topic with expected attributes" do
+      new_name = RandomData.random_sentence
+      new_description = RandomData.random_paragraph 
+      
+      put "/topics/#{topic.id}", params: { topic: { name: new_name, description: new_description } }
+ 
+      updated_topic = topic.reload
+      expect(updated_topic.id).to eq topic.id
+      expect(updated_topic.name).to eq new_name
+      expect(updated_topic.description).to eq new_description
+    end
+ 
+    it "redirects to the updated topic" do
+      new_name = RandomData.random_sentence
+      new_description = RandomData.random_paragraph
+ 
+      put "/topics/#{topic.id}", params: { topic: { name: new_name, description: new_description } }
+      expect(response).to redirect_to topic
+    end
+  end
+
+  describe "DELETE destroy" do
+    it "deletes the topic" do
+      delete "/topics/#{topic.id}"
+      count = Post.where({id: topic.id}).size   
+      expect(count).to eq 0
+    end
+ 
+     it "redirects to topics index" do
+       delete "/topics/#{topic.id}"
+       expect(response).to redirect_to topics_path
+     end
+   end
+
 end
