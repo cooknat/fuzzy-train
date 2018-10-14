@@ -3,7 +3,9 @@ require 'random_data'
 
 RSpec.describe PostsController, type: :request do
   
-  let(:my_post) { Post.create!(title: 'title', body: 'body') }
+   let(:my_topic) { Topic.create!(name:  RandomData.random_sentence, description: RandomData.random_paragraph) }
+   let(:my_post) { my_topic.posts.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph) }
+
 
   describe "GET #index" do
     it "returns http success" do
@@ -19,47 +21,47 @@ RSpec.describe PostsController, type: :request do
   
   describe "GET show" do
     it "returns http success" do
-      get '/posts/', params: { id: my_post.id }
+      get '/posts/', params: { topic_id: my_topic.id, id: my_post.id }
       expect(response.status).to eq 200
     end
      
     it "renders the #show view" do
-      get "/posts/#{my_post.id}"
-      expect(response).to render_template(:show)
+      get "/posts/", params: { topic_id: my_topic.id, id: my_post.id }
+       expect(response).to render_template(:show)
     end
   end
 
   describe "GET new" do
     it "returns http success" do
-      get '/posts/new'
+      get '/posts/new', params: { topic_id: my_topic.id }
       expect(response.status).to eq 200
     end
  
     it "renders the #new view" do
-      get '/posts/new'
+      get '/posts/new', params: { topic_id: my_topic.id }
       expect(response).to render_template :new
     end
   end
  
   describe "POST create" do
     it "increases the number of Post by 1" do
-      expect{ post '/posts', params: { post: { title: RandomData.random_sentence, body: RandomData.random_paragraph } } }.to change(Post,:count).by(1)
+      expect{ post '/posts', params: { topic_id: my_topic.id, post: { title: RandomData.random_sentence, body: RandomData.random_paragraph } } }.to change(Post,:count).by(1)
     end
 
     it "redirects to the new post" do
-      post '/posts', params: { post: { title: RandomData.random_sentence, body: RandomData.random_paragraph } }
-      expect(response).to redirect_to Post.last
+      post '/posts', params: { topic_id: my_topic.id, post: { title: RandomData.random_sentence, body: RandomData.random_paragraph } }
+      expect(response).to redirect_to [my_topic, Post.last]
     end
   end
 
   describe "GET edit" do
     it "returns http success" do
-      get "/posts/#{my_post.id}/edit"
+      get "/posts/#{my_topic_id}/#{my_post.id}/edit"
       expect(response.status).to eq 200
     end
  
     it "renders the #edit view" do
-      get "/posts/#{my_post.id}/edit"
+      get "/posts/#{my_topic.id}/#{my_post.id}/edit"
       expect(response).to render_template(:edit)
     end
  
@@ -79,7 +81,7 @@ RSpec.describe PostsController, type: :request do
       new_title = RandomData.random_sentence
       new_body = RandomData.random_paragraph
  
-      put "/posts/#{my_post.id}", params: { post: {title: new_title, body: new_body } }
+      put "/posts/#{my_post.id}", { topic_id: my_topic.id, id: my_post.id, post: {title: new_title, body: new_body } }
       updated_post = my_post.reload
       
       expect(updated_post.id).to eq my_post.id
@@ -91,22 +93,22 @@ RSpec.describe PostsController, type: :request do
        new_title = RandomData.random_sentence
        new_body = RandomData.random_paragraph
  
-       put "/posts/#{my_post.id}", params: { post: {title: new_title, body: new_body } }
-       expect(response).to redirect_to my_post
+       put "/posts/#{my_post.id}", params: { topic_id: my_topic.id, id: my_post.id, post: {title: new_title, body: new_body } }
+       expect(response).to redirect_to [my_topic, my_post]
      end
    end
    
   describe "DELETE destroy" do
     it "deletes the post" do
-      delete "/posts/#{my_post.id}"
+      delete "/posts/#{my_topic.id}/#{my_post.id}" 
       
       count = Post.where({id: my_post.id}).size
       expect(count).to eq 0
     end
  
     it "redirects to posts index" do
-      delete "/posts/#{my_post.id}"
-      expect(response).to redirect_to posts_path
+      delete "/posts/#{my_topic.id}/#{my_post.id}" 
+      expect(response).to redirect_to my_topic
     end
   end
 end
