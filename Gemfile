@@ -48,6 +48,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'rubocop', require: false
   gem 'shoulda'
+  gem 'shoulda-matchers', '4.0.0.rc1'
 end
 
 group :development do
